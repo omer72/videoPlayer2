@@ -1,7 +1,8 @@
 import TrimBar from "../TrimBar/TrimBar";
 import {ChangeEvent, useEffect, useRef, useState} from "react";
 import {getFormatedTime} from "../../utils";
-import TriangleIcon from '../TrimBar/traingle-icon.svg';
+import PlayIcon from '../../assets/play_icon.svg';
+import PauseIcon from '../../assets/pause_icon.svg';
 import styled from "styled-components";
 
 const VideoElement = styled.div`
@@ -13,6 +14,7 @@ const VideoWindow = styled.div`
     height: 80vh;
     flex-direction: column;
     background-color: black;
+    justify-content: space-around;
     align-items: center;
     margin-bottom: 20px;
 `;
@@ -24,11 +26,15 @@ const VideoCtrl  = styled.div`
 
 const VideoControl = styled.img`
     width:20px;
-    transform: rotate(90deg);
 `;
 
 const VideoLabel = styled.label`
     color: white;
+`;
+
+const VideoTag = styled.video`
+  padding: 20px;
+  max-height: 80%;
 `;
 
 function VideoEditor(){
@@ -39,7 +45,7 @@ function VideoEditor(){
     const [trimEnd, setTrimEnd] = useState(0);
     const [imagePath, setImagePath] = useState<string[]>([]);
     const [showTime, setShowTime] = useState('--:--');
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
     const trimEndRef = useRef(trimEnd);
 
     // Update the ref value whenever count changes
@@ -53,6 +59,8 @@ function VideoEditor(){
             video.addEventListener("loadedmetadata", function () {
                 setVideoDuration(video.duration);
                 setTrimEnd(video.duration);
+                setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
+
             });
             video.addEventListener("timeupdate", function () {
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
@@ -127,6 +135,7 @@ function VideoEditor(){
 
 
     const loadVideo = (e:ChangeEvent<HTMLInputElement>) =>{
+        setImagePath([]);
         const file = e.target.files;
         if (file && file.length) {
             const url = URL.createObjectURL(file[0]);
@@ -138,6 +147,8 @@ function VideoEditor(){
                     // You can use this as the src attribute of an img element, save it to a server, etc.
                     setImagePath(dataUrl);
                 });
+                setTrimStart(0);
+                setTrimEnd(video.duration);
             }
         }
     }
@@ -160,9 +171,9 @@ function VideoEditor(){
             <input type="file" onChange={loadVideo} accept="video/*" /><br/>
             <VideoElement>
                 <VideoWindow>
-                    <video ref={videoRef} className="video" controls={false} />
+                    <VideoTag ref={videoRef} className="video" controls={false} />
                     <VideoCtrl>
-                        <VideoControl alt='controller' src={TriangleIcon} onClick={playVideo}/>
+                        <VideoControl alt='controller' src={isPlaying ? PlayIcon : PauseIcon} onClick={playVideo}/>
                         <VideoLabel>{showTime}</VideoLabel>
                     </VideoCtrl>
                 </VideoWindow>

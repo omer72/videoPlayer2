@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import TriangleIcon from './traingle-icon.svg';
+import TriangleIcon from '../../assets/traingle-icon.svg';
 import styled from "styled-components";
 
 const TrimBarDiv = styled.div`
@@ -149,7 +149,7 @@ function TrimBar( props: {
             window.removeEventListener("mousemove", mouseMoveListener);
             window.removeEventListener("mouseup", mouseUpListener);
         };
-    }, [dragging, updateTrim]);
+    }, [dragging]);
 
     return (
         <TrimBarDiv>
@@ -177,7 +177,7 @@ function TrimBar( props: {
             </VideoProgressCursor>
             <VideoImages >
                 {props.imagePath.map((imgUrl:string, index:number) =>{
-                    return <img alt="videoImages" src={imgUrl} key={index} style={{width:`${100 / props.imagePath.length}%`}} draggable={false}/>
+                    return <img alt="videoImages" src={imgUrl} key={index} style={{width:`${100 / props.imagePath.length}%`, maxHeight: '60px', aspectRatio: 1/1}} draggable={false}/>
                 })}
             </VideoImages>
         </TrimBarDiv>
