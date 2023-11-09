@@ -1,6 +1,8 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import TriangleIcon from '../../assets/traingle-icon.svg';
 import styled from "styled-components";
+import {VideoContext} from "../../context/VideoContext";
+import {VideoContextType} from "../../context/Types";
 
 //#region Style Definitions
 const TrimBarDiv = styled.div`
@@ -84,20 +86,19 @@ const VideoProgressCursorLine = styled.div`
 
 //#endregion
 function TrimBar( props: {
-    videoDuration: number,
     trimStart: number,
     trimEnd: number,
     setTrimStart: (arg0: number) => void,
     setTrimEnd: (arg0: number) => void,
     currentTime: number,
     setCurrentTime: (arg0: number) => void,
-    imagePath: string[]
 }){
     //#region Properties
     const videoProgressRef = useRef<HTMLDivElement>(null);
     const [dragging, setDragging] = useState<string>('');
     const [currentPosition, setCurrentPosition] = useState(0);
     const [movement, setMovement] = useState(0);
+    const { imagePath, videoDuration } = useContext(VideoContext) as VideoContextType;
     //#endregion
 
     //#region lifecycle
@@ -136,7 +137,7 @@ function TrimBar( props: {
         if (videoProgress) {
             const newTime =
                 (getRelativePosition(e, videoProgress) / videoProgress.offsetWidth) *
-                props.videoDuration;
+                videoDuration;
             setMovement(newTime - currentPosition);
             setCurrentPosition(newTime);
             switch (position) {
@@ -166,21 +167,21 @@ function TrimBar( props: {
     return (
         <TrimBarDiv>
             <SliderBackground id="videoProgress" ref={videoProgressRef}>
-                <SliderEmpty style={{width: `${(props.trimStart / props.videoDuration) * 100}%`}}></SliderEmpty>
+                <SliderEmpty style={{width: `${(props.trimStart / videoDuration) * 100}%`}}></SliderEmpty>
                 <SliderStart onMouseDown={() => setDragging("start")}/>
                 <SliderCenter
-                     style={{width: `${((props.trimEnd - props.trimStart) / props.videoDuration) * 100}%`}}
+                     style={{width: `${((props.trimEnd - props.trimStart) / videoDuration) * 100}%`}}
                      onMouseDown={() => setDragging("both")}
                 >
                 </SliderCenter>
                 <SliderEnd  onMouseDown={() => setDragging("end")}/>
                 <SliderEmpty
-                     style={{width: `${((props.videoDuration - props.trimEnd) / props.videoDuration) * 100}%`}}
+                     style={{width: `${((videoDuration - props.trimEnd) / videoDuration) * 100}%`}}
                 ></SliderEmpty>
             </SliderBackground>
             <VideoProgressCursor id="videoProgressCursor" >
                 <div
-                     style={{paddingRight: `${(props.currentTime/props.videoDuration)*100}%`}}>
+                     style={{paddingRight: `${(props.currentTime/videoDuration)*100}%`}}>
                 </div>
                 <VideoProgressCursorGroup onMouseDown={() => setDragging("cursor")} >
                     <VideoProgressCursorIcon alt="timeLineController" src={TriangleIcon}/>
@@ -188,13 +189,13 @@ function TrimBar( props: {
                 </VideoProgressCursorGroup>
             </VideoProgressCursor>
             <VideoImages >
-                {props.imagePath.map((imgUrl:string, index:number) =>{
-                    return <img alt="videoImages" src={imgUrl} key={index} style={{width:`${100 / props.imagePath.length}%`, maxHeight: '60px', aspectRatio: 1/1}} draggable={false}/>
+                {imagePath && imagePath.map((imgUrl:string, index:number) =>{
+                    return <img alt="videoImages" src={imgUrl} key={index} style={{width:`${100 / imagePath.length}%`, maxHeight: '60px', aspectRatio: 1}} draggable={false}/>
                 })}
             </VideoImages>
         </TrimBarDiv>
 
     );
-};
+}
 
 export default TrimBar;

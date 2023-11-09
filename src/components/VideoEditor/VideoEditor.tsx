@@ -1,10 +1,11 @@
 import TrimBar from "../TrimBar/TrimBar";
-import {ChangeEvent, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react";
 import {getFormatedTime} from "../../utils";
 import PlayIcon from '../../assets/play_icon.svg';
 import PauseIcon from '../../assets/pause_icon.svg';
 import styled from "styled-components";
-
+import {VideoContext} from "../../context/VideoContext";
+import {VideoContextType} from "../../context/Types";
 //#region Style Definitions
 const VideoElement = styled.div`
   display:flex;
@@ -42,13 +43,13 @@ function VideoEditor(){
 
     //#region Properties
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [videoDuration, setVideoDuration] = useState(0);
     const [trimStart, setTrimStart] = useState(0);
     const [trimEnd, setTrimEnd] = useState(0);
-    const [imagePath, setImagePath] = useState<string[]>([]);
     const [showTime, setShowTime] = useState('--:--');
     const [isPlaying, setIsPlaying] = useState(true);
     const trimEndRef = useRef(trimEnd);
+    const { setImagePath, setVideoDuration } = useContext(VideoContext) as VideoContextType;
+
     //#endregion
 
     //#region Lifecycle
@@ -69,7 +70,6 @@ function VideoEditor(){
             });
             video.addEventListener("timeupdate", function () {
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
-                console.log(trimEnd);
                 if (video.currentTime > trimEndRef.current) {
                     video.pause();
                 }
@@ -91,8 +91,9 @@ function VideoEditor(){
         const video:HTMLVideoElement | null = videoRef.current;
         if (video && video.currentTime > value){
             video.currentTime = value;
+            setTrimEnd(value);
         }
-        setTrimEnd(value);
+
     }
 
     const updateCurrentTime = (value:number) => {
@@ -142,7 +143,7 @@ function VideoEditor(){
 
 
     const loadVideo = (e:ChangeEvent<HTMLInputElement>) =>{
-        setImagePath([]);
+        if (setImagePath) setImagePath([]);
         const file = e.target.files;
         if (file && file.length) {
             const url = URL.createObjectURL(file[0]);
@@ -152,7 +153,7 @@ function VideoEditor(){
                 captureVideoThumbnails(url, 10).then(dataUrl => {
                     // This is a base64 string of the first frame of the video.
                     // You can use this as the src attribute of an img element, save it to a server, etc.
-                    setImagePath(dataUrl);
+                    if (setImagePath) setImagePath(dataUrl);
                 });
                 setTrimStart(0);
                 setTrimEnd(video.duration);
@@ -186,14 +187,12 @@ function VideoEditor(){
                 </VideoWindow>
             </VideoElement>
             <TrimBar
-                videoDuration={videoDuration}
                 trimStart={trimStart}
                 trimEnd={trimEnd}
                 setTrimStart={updateStartTime}
                 setTrimEnd={updateEndTime}
                 currentTime={videoRef.current != null ? videoRef.current.currentTime: 0}
                 setCurrentTime={updateCurrentTime}
-                imagePath={imagePath}
             />
         </div>
     )
