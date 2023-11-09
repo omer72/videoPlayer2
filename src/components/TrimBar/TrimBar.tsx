@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from "react";
 import TriangleIcon from '../../assets/traingle-icon.svg';
 import styled from "styled-components";
 
+//#region Style Definitions
 const TrimBarDiv = styled.div`
     position: relative;
     width: 80%;
@@ -80,6 +81,8 @@ const VideoProgressCursorLine = styled.div`
     cursor: pointer;
     z-index: 5;
 `;
+
+//#endregion
 function TrimBar( props: {
     videoDuration: number,
     trimStart: number,
@@ -90,10 +93,38 @@ function TrimBar( props: {
     setCurrentTime: (arg0: number) => void,
     imagePath: string[]
 }){
+    //#region Properties
     const videoProgressRef = useRef<HTMLDivElement>(null);
     const [dragging, setDragging] = useState<string>('');
     const [currentPosition, setCurrentPosition] = useState(0);
     const [movement, setMovement] = useState(0);
+    //#endregion
+
+    //#region lifecycle
+    useEffect(() => {
+        const mouseMoveListener = (e:MouseEvent) => {
+            e.stopPropagation();
+            if (dragging) {
+                updateTrim(e, dragging);
+            }
+        };
+
+        const mouseUpListener = () => {
+            setDragging('');
+        };
+
+        window.addEventListener("mousemove", mouseMoveListener);
+        window.addEventListener("mouseup", mouseUpListener);
+
+        return () => {
+            window.removeEventListener("mousemove", mouseMoveListener);
+            window.removeEventListener("mouseup", mouseUpListener);
+        };
+    }, [dragging]);
+
+    //#endregion
+
+    //#region Methods
 
     const getRelativePosition = (e:MouseEvent, element:HTMLDivElement) => {
         const rect = element.getBoundingClientRect();
@@ -130,26 +161,7 @@ function TrimBar( props: {
         }
     };
 
-    useEffect(() => {
-        const mouseMoveListener = (e:MouseEvent) => {
-            e.stopPropagation();
-            if (dragging) {
-                updateTrim(e, dragging);
-            }
-        };
-
-        const mouseUpListener = () => {
-            setDragging('');
-        };
-
-        window.addEventListener("mousemove", mouseMoveListener);
-        window.addEventListener("mouseup", mouseUpListener);
-
-        return () => {
-            window.removeEventListener("mousemove", mouseMoveListener);
-            window.removeEventListener("mouseup", mouseUpListener);
-        };
-    }, [dragging]);
+    //#endregion
 
     return (
         <TrimBarDiv>

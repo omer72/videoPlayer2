@@ -5,6 +5,7 @@ import PlayIcon from '../../assets/play_icon.svg';
 import PauseIcon from '../../assets/pause_icon.svg';
 import styled from "styled-components";
 
+//#region Style Definitions
 const VideoElement = styled.div`
   display:flex;
   justify-content:center
@@ -36,9 +37,10 @@ const VideoTag = styled.video`
   padding: 20px;
   max-height: 80%;
 `;
-
+//#endregion
 function VideoEditor(){
 
+    //#region Properties
     const videoRef = useRef<HTMLVideoElement>(null);
     const [videoDuration, setVideoDuration] = useState(0);
     const [trimStart, setTrimStart] = useState(0);
@@ -47,6 +49,9 @@ function VideoEditor(){
     const [showTime, setShowTime] = useState('--:--');
     const [isPlaying, setIsPlaying] = useState(true);
     const trimEndRef = useRef(trimEnd);
+    //#endregion
+
+    //#region Lifecycle
 
     // Update the ref value whenever count changes
     useEffect(() => {
@@ -64,14 +69,16 @@ function VideoEditor(){
             });
             video.addEventListener("timeupdate", function () {
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
+                console.log(trimEnd);
                 if (video.currentTime > trimEndRef.current) {
                     video.pause();
                 }
             });
         }
     }, []);
+    //#endregion
 
-
+    //#region Methods
     const updateStartTime = (value:number) => {
         const video:HTMLVideoElement | null = videoRef.current;
         if (video && video.currentTime < value){
@@ -164,7 +171,7 @@ function VideoEditor(){
         }
 
     }
-
+    //#endregion
 
     return (
         <div>
