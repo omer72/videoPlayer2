@@ -1,6 +1,65 @@
-# Getting Started with Create React App
+# Video Player Exercise 
+
+![screen.png](screen.png)
+
+### Step 1: Setup
+
+Create a new React project using Create React App or your preferred setup.
+Set up the basic project structure with a component directory and necessary files.
+
+
+### Step 2: Component Structure
+
+Create a VideoPlayer component as the main component for the video player.
+Inside the VideoPlayer component, create child components for the timeline and the trim bar.
+
+
+### Step 3: CSS Styling
+
+Write CSS styles for the VideoPlayer component and its child components.
+Use CSS Grid or Flexbox to arrange the components in the desired layout.
+Style the timeline component to display the progress of the video and provide visual cues for the user.
+
+
+### Step 4: Video Rendering
+
+Use the HTML5 `video` tag to render the video within the VideoPlayer component.
+Implement logic to load and play the video using React's state and event handling.
+
+
+### Step 5: Timeline Implementation
+
+Create a Timeline component responsible for displaying the progress of the video.
+Use React's state to track the current video time and update the timeline accordingly.
+Implement logic to allow users to click on the timeline to jump to a specific video time.
+
+
+### Step 6: Trim Bar Implementation
+
+Create a TrimBar component to allow users to adjust and move the trim bar to set the start and end points for trimming.
+Use React's state to track the position of the trim bar and update the video accordingly.
+Implement logic to restrict the trim bar's movement within the valid range of the video length.
+
+
+
+
+### Step 7: Video Trimming
+
+Handle user interactions to capture the start and end points set by the trim bar.
+Update the video player's state to trim the video based on the selected time range.
+Implement logic to preview the trimmed video without actually modifying the original video.
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Branches
+    There are 2 branches:
+1. `Main`
+2.  `feature/context` : branch using React Context
+
+## Additional Changes
+We can use [react-rnd](https://www.npmjs.com/package/react-rnd) to control the resize of the timing bar
+
 
 ## Available Scripts
 
@@ -10,37 +69,3 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

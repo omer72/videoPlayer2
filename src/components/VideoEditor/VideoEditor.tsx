@@ -1,11 +1,16 @@
-import TrimBar from "../TrimBar/TrimBar";
 import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react";
-import {getFormatedTime} from "../../utils";
-import PlayIcon from '../../assets/play_icon.svg';
-import PauseIcon from '../../assets/pause_icon.svg';
 import styled from "styled-components";
+
+import {getFormatedTime} from "../../utils";
+import TrimBar from "../TrimBar/TrimBar";
 import {VideoContext} from "../../context/VideoContext";
 import {VideoContextType} from "../../context/Types";
+
+// Images
+import PlayIcon from '../../assets/play_icon.svg';
+import PauseIcon from '../../assets/pause_icon.svg';
+
+
 //#region Style Definitions
 const VideoElement = styled.div`
   display:flex;
@@ -39,6 +44,7 @@ const VideoTag = styled.video`
   max-height: 80%;
 `;
 //#endregion
+
 function VideoEditor(){
 
     //#region Properties
@@ -66,7 +72,6 @@ function VideoEditor(){
                 setVideoDuration(video.duration);
                 setTrimEnd(video.duration);
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
-
             });
             video.addEventListener("timeupdate", function () {
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
