@@ -1,9 +1,12 @@
-import TrimBar from "../TrimBar/TrimBar";
 import {ChangeEvent, useEffect, useRef, useState} from "react";
+import styled from "styled-components";
+
+import TrimBar from "../TrimBar/TrimBar";
 import {getFormatedTime} from "../../utils";
+// Images
 import PlayIcon from '../../assets/play_icon.svg';
 import PauseIcon from '../../assets/pause_icon.svg';
-import styled from "styled-components";
+
 
 //#region Style Definitions
 const VideoElement = styled.div`
@@ -38,6 +41,7 @@ const VideoTag = styled.video`
   max-height: 80%;
 `;
 //#endregion
+
 function VideoEditor(){
 
     //#region Properties
@@ -69,7 +73,6 @@ function VideoEditor(){
             });
             video.addEventListener("timeupdate", function () {
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
-                console.log(trimEnd);
                 if (video.currentTime > trimEndRef.current) {
                     video.pause();
                 }
@@ -102,6 +105,7 @@ function VideoEditor(){
         }
     }
 
+    // Function for creating a thumbnail images from video
     function captureVideoThumbnails(videoUrl:string, imageCount:number):Promise<string[]> {
         return new Promise((resolve, reject) => {
             let video = document.createElement('video');
@@ -140,7 +144,7 @@ function VideoEditor(){
         });
     }
 
-
+    // load the video from file path
     const loadVideo = (e:ChangeEvent<HTMLInputElement>) =>{
         setImagePath([]);
         const file = e.target.files;
@@ -160,11 +164,13 @@ function VideoEditor(){
         }
     }
 
+    // handle the play video process.
     const playVideo = () => {
         const video:HTMLVideoElement | null = videoRef.current;
         if (video && !isPlaying){
             video.pause();
             setIsPlaying(!isPlaying);
+        // in case the video is in the end of the time range, pause the video
         } else  if (video && video.currentTime < trimEnd) {
             video.play();
             setIsPlaying(!isPlaying);
@@ -174,8 +180,8 @@ function VideoEditor(){
     //#endregion
 
     return (
-        <div>
-            <input type="file" onChange={loadVideo} accept="video/*" /><br/>
+        <>
+            <input type="file" onChange={loadVideo} accept="video/*" />
             <VideoElement>
                 <VideoWindow>
                     <VideoTag ref={videoRef} className="video" controls={false} />
@@ -195,7 +201,7 @@ function VideoEditor(){
                 setCurrentTime={updateCurrentTime}
                 imagePath={imagePath}
             />
-        </div>
+        </>
     )
 }
 

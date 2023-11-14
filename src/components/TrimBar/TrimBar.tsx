@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from "react";
-import TriangleIcon from '../../assets/traingle-icon.svg';
 import styled from "styled-components";
+// images
+import TriangleIcon from '../../assets/traingle-icon.svg';
+
 
 //#region Style Definitions
 const TrimBarDiv = styled.div`
@@ -83,6 +85,7 @@ const VideoProgressCursorLine = styled.div`
 `;
 
 //#endregion
+
 function TrimBar( props: {
     videoDuration: number,
     trimStart: number,
