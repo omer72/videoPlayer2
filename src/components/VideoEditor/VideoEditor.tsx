@@ -72,6 +72,7 @@ function VideoEditor(){
                 setVideoDuration(video.duration);
                 setTrimEnd(video.duration);
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
+
             });
             video.addEventListener("timeupdate", function () {
                 setShowTime(getFormatedTime(video.currentTime) + "/" + getFormatedTime(video.duration));
