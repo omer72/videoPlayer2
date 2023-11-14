@@ -56,12 +56,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     There are 2 branches:
 1. `Main`
 2.  `feature/context` : branch using React Context
+
+## Additional Changes
+We can use [react-rnd](https://www.npmjs.com/package/react-rnd) to control the resize of the timing bar
+
+
 ## Available Scripts
 
 In the project directory, you can run:
-
-## Additional Changes
-We can use [react-rnd](https://www.npmjs.com/package/react-rnd) to control the resize of the timing bar 
 
 ### `npm start`
 
